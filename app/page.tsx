@@ -1,5 +1,4 @@
 import styles from "./page.module.css";
-import Section from "@/components/Section/Section";
 import Container from "@/components/Container/Container";
 import Link from "next/link";
 
@@ -12,7 +11,7 @@ export default function Home() {
           <h2 className={styles.description}>
             Reliable and budget-friendly rentals for any journey
           </h2>
-          <Link href="/" className={styles.button}>
+          <Link href="/catalog" className={styles.button}>
             View Catalog
           </Link>
         </div>

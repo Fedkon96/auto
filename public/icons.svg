@@ -39,5 +39,8 @@
 <symbol id="icon-vector" viewBox="0 0 4 32">
 <path stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" stroke-width="2" d="M2 0v32"></path>
 </symbol>
+<symbol id="icon-reset" viewBox="0 0 24 24">
+	<path d="M12 2a10 10 0 1 0 10 10h-2a8 8 0 1 1-8-8v3l4-4-4-4v3z"></path>
+</symbol>
 </defs>
 </svg>

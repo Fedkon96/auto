@@ -43,11 +43,11 @@ export default function CarsList() {
         (acc, p) => acc + (Array.isArray(p?.cars) ? p.cars.length : 0),
         0
       );
-      // Если известен totalCars, прекращаем когда всё загружено
+
       if (Number.isFinite(lastPage.totalCars) && loaded >= lastPage.totalCars) {
         return undefined;
       }
-      // Если известны page/totalPages — используем их
+
       if (
         Number.isFinite(lastPage.page) &&
         Number.isFinite(lastPage.totalPages)
@@ -56,7 +56,7 @@ export default function CarsList() {
           ? lastPage.page + 1
           : undefined;
       }
-      // Фоллбэк: пока приходят элементы — идём дальше
+
       if (Array.isArray(lastPage.cars) && lastPage.cars.length > 0) {
         return (allPages?.length ?? 1) + 1;
       }

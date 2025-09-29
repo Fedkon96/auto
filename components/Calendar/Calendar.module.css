@@ -1,0 +1,185 @@
+.wrap {
+  width: 276px;
+  height: 284px;
+  background: #fff;
+}
+
+.dp :global(.rdp-root) {
+  --rdp-day-width: 36px;
+  --rdp-day-height: 32px;
+  --rdp-day_button-width: 36px;
+  --rdp-day_button-height: 32px;
+  font-family: var(--font-inter);
+}
+
+.dp :global(.rdp-months) {
+  display: flex;
+  justify-content: center;
+}
+
+.dp :global(.rdp-weekdays) th {
+  font-family: var(--font-inter);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.2;
+  color: #8d929a;
+  padding-bottom: 8px;
+}
+
+.dp :global(.rdp-day) {
+  font-family: var(--font-inter);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.2;
+  color: #101828;
+}
+
+.dp :global(.rdp-day) button:hover,
+.dp :global(.rdp-day) button:focus {
+  background: #3470ff;
+  color: #fff;
+}
+
+.dp :global(.rdp-day_button) {
+  width: var(--rdp-day_button-width);
+  height: var(--rdp-day_button-height);
+  border-radius: 999px;
+}
+
+.dp :global(.rdp-day_button:hover),
+.dp :global(.rdp-day_button:focus) {
+  background: #f0f4ff;
+}
+
+.dp :global(.rdp-selected),
+.dp :global(.rdp-selected .rdp-day_button) {
+  background: #3470ff;
+  color: #fff;
+}
+
+.dp :global(.rdp-chevron) polygon {
+  fill: #3470ff;
+}
+
+.dp :global(.rdp-button_previous),
+.dp :global(.rdp-button_next) {
+  z-index: 1;
+}
+
+.dp :global(.rdp-caption_label) {
+  font-family: var(--font-inter);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+:global(.CarDetails-module__9iBDyW__calendarPopup) {
+  padding: 0 !important;
+  height: 274px;
+}
+
+:global(.rdp-button_previous) {
+  width: 24px !important;
+  height: 24px !important;
+  margin: 12px 0 12px 12px !important;
+  border: none !important;
+}
+
+:global(.rdp-selected) {
+  border: none !important;
+  /* color: #3470ff !important; */
+  border-radius: 50% !important;
+}
+
+:global(.rdp-selected):hover,
+:global(.rdp-selected):focus {
+  border: none !important;
+  background: #3470ff;
+}
+
+:global(.rdp-selected) .rdp-day_button {
+  border: transparent !important;
+  /* color: #3470ff !important; */
+  border-radius: 50% !important;
+  outline: transparent !important;
+}
+
+/* :global(.rdp-month) polygon:hover,
+:global(.rdp-month) polygon:focus {
+  color: #0b44cd !important;
+} */
+
+:global(.rdp-button_next) {
+  width: 24px !important;
+  height: 24px !important;
+  margin: 12px 12px 12px 0px !important;
+  border: none !important;
+}
+
+:global(.rdp-button_next):hover,
+:global(.rdp-button_next):focus {
+  border: none !important;
+}
+
+:global(.rdp-month_caption) {
+  margin: 12px 0 !important;
+  height: 24px !important;
+}
+
+:global(.rdp-month) {
+  width: 276px !important;
+}
+
+:global(.rdp-weekdays) {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 12px;
+}
+
+:global(.rdp-month_grid) {
+  width: 276px !important;
+}
+
+:global(.rdp-month_grid) thead {
+  width: 276px !important;
+  border-bottom: #3470ff 1px solid !important;
+}
+
+:global(.rdp-day) {
+  width: 36px !important;
+  height: 32px !important;
+}
+
+:global(.rdp-day .rdp-day_button) {
+  width: 36px !important;
+  height: 32px !important;
+}
+
+:global(.rdp-disabled) {
+  width: 36px !important;
+  height: 32px !important;
+}
+
+:global(.rdp-weeks) {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 12px 12px 12px;
+}
+
+:global(.rdp-weekdays) th {
+  width: 36px !important;
+  padding-top: 0;
+  margin-bottom: 4px !important;
+}
+
+:global(.rdp-selected) {
+  border: transparent !important;
+  outline: transparent !important;
+}
+
+:global(.rdp-selected .rdp-day_button) {
+  border: transparent !important;
+  outline: transparent !important;
+}

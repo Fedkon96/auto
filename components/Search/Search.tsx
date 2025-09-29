@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import css from "./Search.module.css";
 import { fetchCarsBrands } from "@/lib/api";
 import Dropdown from "./Dropdown";
-import { RiResetLeftFill } from "react-icons/ri";
+import Icon from "@/components/Icon/Icon";
 import formatNumberWithComma from "@/lib/format";
 
 const PRICES = Array.from({ length: (500 - 30) / 10 + 1 }, (_, i) =>
@@ -19,14 +19,12 @@ export default function Search() {
   const idMin = useId();
   const idMax = useId();
   const [brand, setBrand] = useState("");
-  const [price, setPrice] = useState(""); // UI like "$80"
-  const [fromKm, setFromKm] = useState<string>(""); // minMileage
-  const [toKm, setToKm] = useState<string>(""); // maxMileage
+  const [price, setPrice] = useState("");
+  const [fromKm, setFromKm] = useState<string>("");
+  const [toKm, setToKm] = useState<string>("");
   const [brands, setBrands] = useState<string[]>([]);
-  // no loading UI state for brands to avoid dropdown flicker
   const [brandsError, setBrandsError] = useState<string | null>(null);
   const [spinReset, setSpinReset] = useState(false);
-  // Dropdown handles its own open/close state; no local arrow state needed
 
   const FROM_PREFIX = "From ";
   const TO_PREFIX = "To ";
@@ -163,7 +161,6 @@ export default function Search() {
               className={`${css.input} ${css.inputWithPrefix}`}
               value={`${FROM_PREFIX}${formatNumberWithComma(fromKm)}`}
               onChange={(e) => {
-                // strip prefix and non-digits
                 const raw = e.target.value.slice(FROM_PREFIX.length);
                 const cleaned = raw.replace(/\D+/g, "");
                 setFromKm(cleaned);
@@ -234,10 +231,12 @@ export default function Search() {
                 router.push("/catalog");
                 setSpinReset(true);
               }}
+              onAnimationEnd={() => setSpinReset(false)}
             >
-              <RiResetLeftFill
+              <Icon
+                id="icon-reset"
                 className={`${css.iconReset} ${spinReset ? css.iconResetSpin : ""}`}
-                onAnimationEnd={() => setSpinReset(false)}
+                ariaHidden
               />
             </button>
           </div>
