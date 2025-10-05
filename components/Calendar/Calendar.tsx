@@ -13,6 +13,12 @@ type Props = {
   onChange?: (date?: Date) => void;
   disabledBeforeToday?: boolean;
   className?: string;
+  /** Минимально допустимая дата (включительно). Если указана, перекрывает disabledBeforeToday. */
+  minDate?: Date;
+  /** Максимально допустимая дата (включительно). */
+  maxDate?: Date;
+  /** Отключить выбор выходных (суббота/воскресенье). */
+  disableWeekends?: boolean;
 };
 
 const formatWeekdayName: Formatters["formatWeekdayName"] = (date) => {
@@ -30,10 +36,63 @@ export default function Calendar({
   onChange,
   disabledBeforeToday = true,
   className,
+  minDate,
+  maxDate,
+  disableWeekends = false,
 }: Props) {
   const onSelect: SelectSingleEventHandler = (day) => {
+    // Избегаем лишних вызовов если дата не изменилась
+    if (day?.getTime() === value?.getTime() || (!day && !value)) {
+      return;
+    }
     onChange?.(day ?? undefined);
   };
+
+  // Формируем правила отключения дат
+  // react-day-picker принимает либо объект-матчер, либо массив матчеров
+  const disabledMatchers: any[] = [];
+
+  // Приоритет: если явно задана minDate — используем её, иначе опционально disabledBeforeToday
+  if (minDate) {
+    disabledMatchers.push({
+      before: new Date(
+        minDate.getFullYear(),
+        minDate.getMonth(),
+        minDate.getDate()
+      ),
+    });
+  } else if (disabledBeforeToday) {
+    const today = new Date();
+    disabledMatchers.push({
+      before: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
+    });
+  }
+
+  if (maxDate) {
+    // before/after включают/исключают сами даты по документации: используем after для ограничений > maxDate
+    // В DayPicker v8 объект { after: date } отключит все даты после указанной.
+    disabledMatchers.push({
+      after: new Date(
+        maxDate.getFullYear(),
+        maxDate.getMonth(),
+        maxDate.getDate()
+      ),
+    });
+  }
+
+  if (disableWeekends) {
+    disabledMatchers.push((date: Date) => {
+      const day = date.getDay();
+      return day === 0 || day === 6; // воскресенье или суббота
+    });
+  }
+
+  const disabled =
+    disabledMatchers.length === 0
+      ? undefined
+      : disabledMatchers.length === 1
+        ? disabledMatchers[0]
+        : disabledMatchers;
 
   return (
     <div className={`${styles.wrap} ${className ?? ""}`.trim()}>
@@ -42,7 +101,7 @@ export default function Calendar({
         navLayout="around"
         selected={value}
         onSelect={onSelect}
-        disabled={disabledBeforeToday ? { before: new Date() } : undefined}
+        disabled={disabled}
         locale={enMon}
         formatters={{ formatWeekdayName }}
         styles={{
