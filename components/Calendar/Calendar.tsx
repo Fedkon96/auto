@@ -69,12 +69,20 @@ export default function Calendar({
       });
     }
 
-    if (maxDate) {
+    // Ограничение максимальной даты: если maxDate не задан, по умолчанию +2 месяца от сегодня
+    const todayForMax = new Date();
+    const defaultMaxDate = new Date(
+      todayForMax.getFullYear(),
+      todayForMax.getMonth() + 2,
+      todayForMax.getDate()
+    );
+    const effectiveMaxDate = maxDate ?? defaultMaxDate;
+    if (effectiveMaxDate) {
       list.push({
         after: new Date(
-          maxDate.getFullYear(),
-          maxDate.getMonth(),
-          maxDate.getDate()
+          effectiveMaxDate.getFullYear(),
+          effectiveMaxDate.getMonth(),
+          effectiveMaxDate.getDate()
         ),
       });
     }
