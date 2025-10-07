@@ -19,16 +19,13 @@ type Props = {
   maxDate?: Date;
   /** Отключить выбор выходных (суббота/воскресенье). */
   disableWeekends?: boolean;
+  /** С какого дня начинается неделя: 0 (вс) ... 6 (сб). По умолчанию 1 (понедельник). */
+  weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
 };
 
 const formatWeekdayName: Formatters["formatWeekdayName"] = (date) => {
   const map = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"] as const;
   return map[date.getDay()];
-};
-
-const enMon = {
-  ...enUS,
-  options: { ...enUS.options, weekStartsOn: 1 as const },
 };
 
 export default function Calendar({
@@ -39,6 +36,7 @@ export default function Calendar({
   minDate,
   maxDate,
   disableWeekends = false,
+  weekStartsOn = 1,
 }: Props) {
   const onSelect: SelectSingleEventHandler = (day) => {
     // Избегаем лишних вызовов если дата не изменилась
@@ -93,6 +91,14 @@ export default function Calendar({
     return list;
   }, [minDate, maxDate, disableWeekends, disabledBeforeToday]);
 
+  // Мемоизируем локаль с переопределением первого дня недели
+  const locale = useMemo(() => {
+    return {
+      ...enUS,
+      options: { ...(enUS.options || {}), weekStartsOn },
+    } as typeof enUS;
+  }, [weekStartsOn]);
+
   return (
     <div className={`${styles.wrap} ${className ?? ""}`.trim()}>
       <DayPicker
@@ -101,7 +107,7 @@ export default function Calendar({
         selected={value}
         onSelect={onSelect}
         disabled={disabled}
-        locale={enMon}
+        locale={locale}
         formatters={{ formatWeekdayName }}
         styles={{
           month_grid: { marginTop: 12, rowGap: 12 },
