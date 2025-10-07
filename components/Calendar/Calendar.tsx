@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
-import type { SelectSingleEventHandler } from "react-day-picker";
+import type { SelectSingleEventHandler, Matcher } from "react-day-picker";
 import { enUS } from "date-fns/locale";
 import type { Formatters } from "react-day-picker";
 import styles from "./Calendar.module.css";
@@ -48,51 +48,50 @@ export default function Calendar({
     onChange?.(day ?? undefined);
   };
 
-  // Формируем правила отключения дат
-  // react-day-picker принимает либо объект-матчер, либо массив матчеров
-  const disabledMatchers: any[] = [];
+  const disabled = useMemo<Matcher | Matcher[] | undefined>(() => {
+    const list: Matcher[] = [];
 
-  // Приоритет: если явно задана minDate — используем её, иначе опционально disabledBeforeToday
-  if (minDate) {
-    disabledMatchers.push({
-      before: new Date(
-        minDate.getFullYear(),
-        minDate.getMonth(),
-        minDate.getDate()
-      ),
-    });
-  } else if (disabledBeforeToday) {
-    const today = new Date();
-    disabledMatchers.push({
-      before: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
-    });
-  }
+    // Если явно задана minDate — используем её. Иначе используем опцию disabledBeforeToday.
+    if (minDate) {
+      list.push({
+        before: new Date(
+          minDate.getFullYear(),
+          minDate.getMonth(),
+          minDate.getDate()
+        ),
+      });
+    } else if (disabledBeforeToday) {
+      const today = new Date();
+      list.push({
+        before: new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate()
+        ),
+      });
+    }
 
-  if (maxDate) {
-    // before/after включают/исключают сами даты по документации: используем after для ограничений > maxDate
-    // В DayPicker v8 объект { after: date } отключит все даты после указанной.
-    disabledMatchers.push({
-      after: new Date(
-        maxDate.getFullYear(),
-        maxDate.getMonth(),
-        maxDate.getDate()
-      ),
-    });
-  }
+    if (maxDate) {
+      list.push({
+        after: new Date(
+          maxDate.getFullYear(),
+          maxDate.getMonth(),
+          maxDate.getDate()
+        ),
+      });
+    }
 
-  if (disableWeekends) {
-    disabledMatchers.push((date: Date) => {
-      const day = date.getDay();
-      return day === 0 || day === 6; // воскресенье или суббота
-    });
-  }
+    if (disableWeekends) {
+      list.push((date: Date) => {
+        const day = date.getDay();
+        return day === 0 || day === 6; // воскресенье (0) или суббота (6)
+      });
+    }
 
-  const disabled =
-    disabledMatchers.length === 0
-      ? undefined
-      : disabledMatchers.length === 1
-        ? disabledMatchers[0]
-        : disabledMatchers;
+    if (list.length === 0) return undefined;
+    if (list.length === 1) return list[0];
+    return list;
+  }, [minDate, maxDate, disableWeekends, disabledBeforeToday]);
 
   return (
     <div className={`${styles.wrap} ${className ?? ""}`.trim()}>
